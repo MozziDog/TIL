@@ -22,7 +22,15 @@ int main(void)
     for(int i=num; i>1; i--)
     {
         makeHeap(i);
-        swap(&array[0], &array[i]);
+        /*
+        //알고리즘의 제대로 작동 여부 확인용
+        for (int i = 0; i<num; i++)
+        {
+            printf("%d\n", array[i]);
+        }
+        printf("-----------------\n");
+        */
+        swap(&array[0], &array[i-1]);
     }
     for (int i = 0; i<num; i++)
     {
@@ -32,7 +40,7 @@ int main(void)
 
 void makeHeap(int num)
 {
-    for (int i = 1; i < num; i++)
+    for (int i = num-1; i > 0; i--)
     {
         int c = i;
         do
@@ -41,6 +49,7 @@ void makeHeap(int num)
             {
                 swap(&array[c], &array[(c - 1) / 2]);
             }
+            c=(c-1)/2;
         } while (c != 0);
     }
 }
