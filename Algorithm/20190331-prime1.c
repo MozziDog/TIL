@@ -1,3 +1,6 @@
+//백준 1978번 문제
+//주어진 수 중 소수의 개수 구하기
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
