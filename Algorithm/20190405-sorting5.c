@@ -1,13 +1,15 @@
 //백준 2751번 문제
 //merge sort 병합 정렬
 //난 잘 실행되는데 왜 백준에서는 런타임 에러가 날까
+//원인 : stack overflow 의 발생
+//스택 공간은 한정(보통 1MB정도)되어있는데 지역변수로 크기가 큰 배열을 선언하였기 때문
 
 #include <stdio.h>
 #include <stdlib.h>
 
+int b[1000000];
 //conquer
 void merge(int* array, int low, int mid, int high){
-    int b[1000];
     //low는 왼쪽의 시작, mid+1은 오른쪽의 시작
     int i=low, j=mid+1, k= 0;
     //
