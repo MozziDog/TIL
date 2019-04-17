@@ -13,7 +13,7 @@ using namespace std;
 int main(void)
 {
     int length;
-    cin>>length;
+    scanf("%d",length);
     int* array = new int[length];
     int* tmparray = new int[length];
     char* answer = new char[1000000];
@@ -21,7 +21,7 @@ int main(void)
     int answerLength = 0;
     int maxinStack = 0;
     for(int i=0; i<length; i++){
-        cin>>array[i];
+        scanf("%d",array[i]);
     }
     for(int i=0; i<length; i++)
     {
@@ -29,8 +29,8 @@ int main(void)
         {
             if(tmparray[tmparrayLength]!=array[i])
             {
-            cout<<"NO";
-            return 0;
+                printf("NO");
+                return 0;
             }
             else
             {
@@ -52,7 +52,7 @@ int main(void)
     }
     for(int i=0; i<answerLength; i++)
     {
-        cout<<answer[i]<<endl;
+        printf("%d\n",answer[i]);
     }
     return 0;
 }
