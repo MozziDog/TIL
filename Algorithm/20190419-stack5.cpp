@@ -8,13 +8,18 @@
 //백준 사이트에서는 런타임 에러로 뜸
 //참고한 사이트: https://zorba91.tistory.com/entry/java-백준-알고리즘-2504번-괄호의-값-풀이
 
+//런타임 에러의 대표적인 유형으로 segfault가 있다는 정보.
+//stack의 자료형을 char에서 int로 수정
+//givenArray 배열 크기를 31로 증가.
+//여전히 런타임 에러...
+
 #include <iostream>
 
 int main()
 {
-    char stack[15];
+    int stack[15];
     int stackIdx = -1; //스택 최상위를 가리킴.
-    char givenArray[30] = {0};
+    char givenArray[31] = {0};
     int total = 0;
     int tmp;
     scanf("%s", givenArray);
