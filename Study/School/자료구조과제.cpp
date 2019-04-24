@@ -12,6 +12,7 @@ class Biscard //명함
     char *name;
     char *phone;
     //1.2 생성자를 정의한다. 생성자는 이름과 전화번호를 입력받고 동적 메모리를 할당 받아 저장하여 name과 phone 포인터 변수를 통해 접근할 수 있도록 한다.
+    public:
     Biscard()
     {
         name = new char[LENGTH_NAME];
@@ -22,26 +23,26 @@ class Biscard //명함
         cin >> phone;
     }
     //1.3 복사생성자와 대입연산자를 정의한다.
-    public Biscard(const Biscard &copy)
+    Biscard(const Biscard &copy)
     {
         name = new char[strlen(copy.name) + 1];
         strcpy(name, copy.name);
         phone = new char[strlen(copy.phone) + 1];
         strcpy(phone, copy.phone);
     }
-    public Biscard &operator=(const Biscard &a)
+    Biscard &operator=(const Biscard &a)
     {
         strcpy(name, a.name);
         strcpy(phone, a.phone);
     }
     //1.4 소멸자를 정의하며 동적 메모리를 해제한다.
-    public ~Biscard()
+    ~Biscard()
     {
         delete[] name;
         delete[] phone;
     }
     //1.5 이름과 전화번호를 출력하는 ShowInfo() 멤버함수를 정의한다.
-    ShowInfo()
+    void ShowInfo()
     {
         cout << "이름: " << name << endl;
         cout << "전화번호: " << phone << endl;
@@ -86,13 +87,13 @@ template <class T>
 Bag<T>::~Bag() { delete[] array; }
 
 template <class T>
-int Bag<T>::Size()
+int Bag<T>::Size() const
 {
     return top+1;
 }
 
 template <class T>
-bool Bag<T>::IsEmpty()
+bool Bag<T>::IsEmpty() const
 {
     if(top == -1)
         return true;
@@ -101,7 +102,7 @@ bool Bag<T>::IsEmpty()
 }
 
 template <class T>
-T& Bag<T>::Element()
+T& Bag<T>::Element() const
 {
     if(IsEmpty())
     {
@@ -135,11 +136,34 @@ void Bag<T>::Pop()
 }
 
 int main(){
-    Bag<Biscard> cardHolder= new Bag<Biscard>;
-    cout<<cardHolder.Size()<<endl;
-    cout<<cardHolder.IsEmpty()<<endl;
-    cardHolder.Pop();
-    cout<<"POP!!"<<endl;
+    Bag<Biscard> *cardHolder= new Bag<Biscard>(0);
+    cout<<cardHolder->Size()<<endl;
+    cout<<cardHolder->IsEmpty()<<endl;
+    try
+    {
+        cardHolder->Element();
+    }
+    catch(char* errCode)
+    {
+        cout<<"Bag is empty, connot show elements"<<endl;
+    }
+    Biscard *b1=new Biscard;
+    cardHolder->Push(*b1);
+    b1=new Biscard;
+    cardHolder->Push(*b1);
+    b1=new Biscard;
+    cardHolder->Push(*b1);
+    cout<<cardHolder->Size()<<endl;
+    cout<<cardHolder->IsEmpty()<<endl;
+    try
+    {
+        cardHolder->Element();
+    }
+    catch(const std::exception& e)
+    {
+        std::cerr << e.what() << '\n';
+    }
+    
     
     return 0;
 }
