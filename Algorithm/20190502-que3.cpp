@@ -1,4 +1,5 @@
 //백준 11866번 문제
+//백준 1158번 문제 
 //조세퍼스 문제
 //(N, K) 조세퍼스 순열을 구하기
 
@@ -9,7 +10,6 @@
 int main()
 {
     int N, K, index = -1;
-    int tmp; //swap을 위한 tmp
     scanf("%d", &N);
     scanf("%d", &K);
     bool *array = new bool[N];
