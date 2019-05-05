@@ -3,10 +3,12 @@
 
 //오늘은 졸려서 여기까지만 하고 잘래요
 
+//cygwin 상에서 구현 성공
+//백준 채점으로는 런타임 에러.
+//배열 크기 문제로 예상됨
+
 #include <iostream>
 #include <cstring>
-#include <iterator>
-#include <algorithm>
 
 #define INSTRUCTION_LENGTH 11
 using namespace std;
@@ -23,12 +25,13 @@ void ChangeSize1D(T*& a, const int oldSize, const int newSize)
 	a = temp;
 }
 
-class Deck{
+class Deque
+{
     private:
     int * array;
     int frontIdx, backIdx, nowArraySize;
     public:
-    Deck()
+    Deque()
     {
         array = new int[10];
         nowArraySize=10;
@@ -58,10 +61,14 @@ class Deck{
     }
     int pop_front()
     {
+        if(empty())
+            return -1;
         return array[frontIdx++];
     }
     int pop_back()
     {
+        if(empty())
+            return -1;
         return array[backIdx--];
     }
     int size()
@@ -108,20 +115,20 @@ int main()
     char *instruction = new char[INSTRUCTION_LENGTH];
     int num_of_instruction;
     int pushNum;
-    Deck *deck=new Deck();
+    Deque *deck=new Deque();
     int frontIdx=5, backIdx=4;
     scanf("%d", &num_of_instruction);
     for (int i = 0; i < num_of_instruction; i++)
     {
-        scanf("%d", instruction);
+        scanf("%s", instruction);
         if (strcmp(instruction, "push_front") == 0)
         {
-            scanf("%d", pushNum);
+            scanf("%d", &pushNum);
             deck->push_front(pushNum);
         }
         else if(strcmp(instruction, "push_back")==0)
         {
-            scanf("%d", instruction);
+            scanf("%d", &pushNum);
             deck->push_back(pushNum);
         }
         else if(strcmp(instruction,"pop_front")==0)
