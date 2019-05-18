@@ -105,10 +105,23 @@ public class Main {
         {
             int inputTask, inputClassCode, inputSeatNum;
             String inputName;
-            System.out.print("예약:1, 조회:2, 취소:3, 끝내기:4>>");
-            inputTask=scanner.nextInt();
+            while(true){
+                try{
+                    System.out.print("예약:1, 조회:2, 취소:3, 끝내기:4>>");
+                    inputTask = scanner.nextInt();
+                    if((inputTask >= 1)&&(inputTask <=4))
+                        break;
+                    else
+                        System.out.println("없는 메뉴입니다. 다시 입력해주세요");
+                }
+                catch(java.util.InputMismatchException error)
+                {
+                    scanner = new Scanner(System.in);
+                    System.out.println("잘못된 입력입니다. 다시 입력해주세요");
+                }
+            }
             switch (inputTask){
-                case 1:
+                case 1:     //예약
                     System.out.print("좌석구분 S(1), A(2), B(3)>>");
                     inputClassCode=scanner.nextInt()-1;
                     concertHall.ShowSeats(inputClassCode);
@@ -116,6 +129,11 @@ public class Main {
                     String inputname = scanner.next();
                     System.out.print("번호>>");
                     inputSeatNum = scanner.nextInt()-1;
+                    if((inputSeatNum<0)||(inputSeatNum>9))
+                    {
+                        System.out.println("좌석 번호가 올바르지 않습니다. 다시 시도해주세요");
+                        break;
+                    }
                     if(concertHall.seats[inputClassCode][inputSeatNum].isEmpty())
                     {
                         concertHall.seats[inputClassCode][inputSeatNum].MakeReservation(inputname);
@@ -124,13 +142,13 @@ public class Main {
                         System.out.println("이미 예약된 좌석입니다! 예약에 실패했습니다.");
                     }
                     break;
-                case 2:
+                case 2:     //조회
                     concertHall.ShowSeats(0);
                     concertHall.ShowSeats(1);
                     concertHall.ShowSeats(2);
                     System.out.println("<<<조회를 완료하였습니다>>>");
                     break;
-                case 3:
+                case 3:     //취소
                     System.out.print("좌석구분 S(1), A(2), B(3)>>");
                     inputClassCode=scanner.nextInt()-1;
                     concertHall.ShowSeats(inputClassCode);
@@ -141,10 +159,11 @@ public class Main {
                         System.out.println("오류가 발생했습니다. 다시 시도해주세요");
                     }
                     break;
-                case 4:
+                case 4:     //끝내기
                     return;
+                default:
+                    System.out.println("잘못된 메뉴 번호입니다. 다시 시도해주세요");
             }
         }
     }
 }
-
