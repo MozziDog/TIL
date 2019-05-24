@@ -5,10 +5,15 @@
 //완전 정확하게 작동하는데 
 //흠 어딘가 놓친 곳이 있나
 
+//모든 문자열은 1이상 20 이하의 알파벳 소문자로 이루어져있으며...
+//문자열 길이를 각각 21로 수정
+//그래도 틀리네 뭐가 문제일까
+
+
 #include <iostream>
 #include <cstring>
-#define ITEM_LENGTH 15
-#define CATEGORY_LENGTH 10
+#define ITEM_LENGTH 21
+#define CATEGORY_LENGTH 21
 
 class Item
 {
