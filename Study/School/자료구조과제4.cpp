@@ -21,18 +21,20 @@ template <class K, class E>
 class TreeNode
 {
     friend class BST<K, E>;
+
 public:
-    TreeNode(const pair<K,E> p)
+    TreeNode(const pair<K, E> p)
     {
         data.first = p.first;
         data.second = p.second;
-        leftChild =0;
-        rightChild =0;
+        leftChild = 0;
+        rightChild = 0;
     }
+
 private:
-    pair<K,E> data;
-    TreeNode<K,E> *leftChild;
-    TreeNode<K,E> *rightChild;
+    pair<K, E> data;
+    TreeNode<K, E> *leftChild;
+    TreeNode<K, E> *rightChild;
 };
 
 template <class K, class E>
@@ -43,12 +45,12 @@ public:
     bool IsEmpty() const;
     // return true iff the dictionary is empty
     pair<K, E> *Get(const K &) const;
-    pair<K, E> *Get(TreeNode<K,E> *, const K &) const;
+    pair<K, E> *Get(TreeNode<K, E> *, const K &) const;
     // return pointer to the pair with specified key; return 0 if no such pair
     void Insert(const pair<K, E> &);
     // insert the given pair; if key is a duplicate update associated element
     void Delete(const K &);
-    void Delete(TreeNode<K,E>*, TreeNode<K,E>*);
+    void Delete(TreeNode<K, E> *, TreeNode<K, E> *);
     // delete pair with specified key
     void Inorder();
     void Inorder(TreeNode<K, E> *);
@@ -56,11 +58,11 @@ public:
     void Visit(TreeNode<K, E> *);
 
 private:
-    TreeNode<K,E> *root;
+    TreeNode<K, E> *root;
 };
 
-template<class K, class E>
-BST<K,E>::BST()
+template <class K, class E>
+BST<K, E>::BST()
 {
     root = 0;
 }
@@ -81,7 +83,7 @@ pair<K, E> *BST<K, E>::Get(const K &k) const
 }
 
 template <class K, class E> // Workhorse
-pair<K, E> *BST<K, E>::Get(TreeNode<K,E> *p, const K &k) const
+pair<K, E> *BST<K, E>::Get(TreeNode<K, E> *p, const K &k) const
 {
     if (!p)
         return 0;
@@ -112,7 +114,7 @@ void BST<K, E>::Insert(const pair<K, E> &thePair)
     }
 
     // perform insertion
-    p = new TreeNode<K,E>(thePair);
+    p = new TreeNode<K, E>(thePair);
     if (root) // tree not empty
         if (thePair.first < pp->data.first)
             pp->leftChild = p;
@@ -128,43 +130,95 @@ void BST<K, E>::Delete(const K &k)
     TreeNode<K, E> *p = root, *pp = 0;
     while (p)
     {
-        pp = p;
         if (k < p->data.first)
+        {
+            pp = p;
+            printf("p->leftChild\n", k);
             p = p->leftChild;
+        }
         else if (k > p->data.first)
+        {
+            pp = p;
+            printf("set parent's leftChild 0");
             p = p->rightChild;
+        }
         else
         {
             // perform delete
             if (root) // tree not empty
-                Delete(p,pp);
+            {
+                printf("Delete : %d, %d\n", p->data.first, pp->data.first);
+                Delete(p, pp);
+            }
             else
                 break;
             return;
         }
     }
-    printf("삭제 오류\n");
+    std::cout << "삭제 오류" << std::endl;
 }
 
 template <class K, class E>
-void BST<K, E>::Delete(TreeNode<K,E>* DeleteNode, TreeNode<K,E>* ParentNode)
+void BST<K, E>::Delete(TreeNode<K, E> *DeleteNode, TreeNode<K, E> *ParentNode)
 {
-    if(DeleteNode->leftChild)
+    if ((DeleteNode->leftChild) && (DeleteNode->rightChild))
     {
-        DeleteNode->data = DeleteNode->leftChild->data;
-        Delete(DeleteNode->leftChild, DeleteNode);
+        printf("Delete 2-way branch node %d\n", DeleteNode->data.first);
+        //find Largest element in left subTree;
+        TreeNode<K, E> *p = DeleteNode->leftChild, *pp = DeleteNode;
+        while (p->rightChild)
+        {
+            pp = p;
+            p = p->rightChild;
+        }
+        DeleteNode->data = p->data;
+        Delete(p, pp);
         return;
     }
-    if(DeleteNode->rightChild)
+    if (DeleteNode->leftChild)
     {
-        DeleteNode->data = DeleteNode->rightChild->data;
-        Delete(DeleteNode->rightChild, DeleteNode);
+        printf("Delete left-way branch node %ed\n", DeleteNode->data.first);
+        if (DeleteNode == root)
+        {
+            root = DeleteNode->leftChild;
+            delete DeleteNode;
+            return;
+        }
+        if (DeleteNode == ParentNode->leftChild)
+            ParentNode->leftChild = DeleteNode->leftChild;
+        else
+            ParentNode->rightChild = DeleteNode->leftChild;
+        delete DeleteNode;
         return;
     }
-    if(ParentNode->leftChild == DeleteNode)
+    if (DeleteNode->rightChild)
+    {
+        printf("Delete right-way branch node %ed\n", DeleteNode->data.first);
+        if (DeleteNode == root)
+        {
+            root = DeleteNode->rightChild;
+            delete DeleteNode;
+            return;
+        }
+        if (DeleteNode == ParentNode->leftChild)
+            ParentNode->leftChild = DeleteNode->rightChild;
+        else
+            ParentNode->rightChild = DeleteNode->rightChild;
+        delete DeleteNode;
+        return;
+    }
+    printf("Delete leaf Node %d\n", DeleteNode->data.first);
+    printf("ParentNode = Ndode %d\n", ParentNode->data.first);
+    if (DeleteNode->data.first < ParentNode->data.first)
+    {
         ParentNode->leftChild = 0;
-    if(ParentNode->rightChild == DeleteNode)
+        printf("set parent's leftChild 0\n");
+    }
+    else //if(DeleteNode->data.first > ParentNode->data.first)
+    {
         ParentNode->rightChild = 0;
+        printf("set parent's rightChild 0\n");
+    }
     delete DeleteNode;
 }
 
@@ -195,40 +249,55 @@ void BST<K, E>::Visit(TreeNode<K, E> *currentNode)
 
 int main()
 {
-    BST<int, int>* binarySearchTree = new BST<int, int>();
-    binarySearchTree->Insert(pair<int,int>(8, 88));
-    binarySearchTree->Insert(pair<int,int>(4, 44));
-    binarySearchTree->Insert(pair<int,int>(9, 99));
-    binarySearchTree->Insert(pair<int,int>(2, 22));
-    binarySearchTree->Insert(pair<int,int>(1, 11));
-    binarySearchTree->Insert(pair<int,int>(6, 66));
-    binarySearchTree->Insert(pair<int,int>(3, 33));
-    binarySearchTree->Insert(pair<int,int>(5, 55));
-    binarySearchTree->Insert(pair<int,int>(7, 77));
+    BST<int, int> *binarySearchTree = new BST<int, int>();
+    binarySearchTree->Insert(pair<int, int>(8, 88));
+    binarySearchTree->Insert(pair<int, int>(4, 44));
+    binarySearchTree->Insert(pair<int, int>(9, 99));
+    binarySearchTree->Insert(pair<int, int>(2, 22));
+    binarySearchTree->Insert(pair<int, int>(1, 11));
+    binarySearchTree->Insert(pair<int, int>(6, 66));
+    binarySearchTree->Insert(pair<int, int>(3, 33));
+    binarySearchTree->Insert(pair<int, int>(5, 55));
+    binarySearchTree->Insert(pair<int, int>(7, 77));
     //1. 이원 탐색 트리의 노드는 다음과 같은 순서로 추가된다. (insert 함수 사용)
-    std::cout<<"노드 추가, 중위 순회 실행 :"<<std::endl;
+    std::cout << "노드 추가, 중위 순회 실행 :" << std::endl;
     binarySearchTree->Inorder();
     //2. 중위 순회를 수행하여 노드의 second값을 출력한다. (inorder 함수 사용)
     binarySearchTree->Delete(4);
     //3. 노드 4를 삭제한다. (delete 함수 사용)
-    std::cout<<"노드 4 삭제, 중위 순회 실행 :"<<std::endl;
+    std::cout << "노드 4 삭제, 중위 순회 실행 :" << std::endl;
     binarySearchTree->Inorder();
     //4. 중위 순회를 수행하여 노드의 second값을 출력한다. (inorder 함수 사용)
-    binarySearchTree->Delete(5); //여기서 문제 발생
+    binarySearchTree->Delete(5);
     //5. 노드 5를 삭제한다. (delete 함수 사용)
-    std::cout<<"노드 5 삭제, 중위 순회 실행 :"<<std::endl;
+    std::cout << "노드 5 삭제, 중위 순회 실행 :" << std::endl;
     binarySearchTree->Inorder();
     //6. 중위 순회를 수행하여 노드의 second값을 출력한다. (inorder 함수 사용)
     binarySearchTree->Delete(2);
     //7. 노드 2를 삭제한다.(delete 함수 사용)
-    std::cout<<"노드 2 삭제, 중위 순회 실행 :"<<std::endl;
+    std::cout << "노드 2 삭제, 중위 순회 실행 :" << std::endl;
     binarySearchTree->Inorder();
     //8. 중위 순회를 수행하여 노드의 second값을 출력한다. (inorder 함수 사용)
-    std::cout<<std::endl<<"Get(2)의 값 :";
-    printf("%d", binarySearchTree->Get(2)->second);
+    if (binarySearchTree->Get(2))
+    {
+        std::cout << std::endl
+                  << "Get(2)의 값 :";
+        std::cout << binarySearchTree->Get(2)->second << std::endl;
+    }
+    else
+        std::cout << "노드 2가 존재하지 않음";
     //9. 노드 2가 있는지 확인하여 second 결과를 출력한다. (get 함수 사용)
-    std::cout<<std::endl<<"Get(2)의 값 :";
-    printf("%d", binarySearchTree->Get(9)->second);
+    if (binarySearchTree->Get(9))
+    {
+        std::cout << std::endl
+                  << "Get(9)의 값 :";
+        std::cout << binarySearchTree->Get(9)->second << std::endl;
+    }
+    else
+    {
+        std::cout << "노드 9가 존재하지 않음";
+    }
+
     //10. 노드 9가 있는지 확인하여 second 결과를 출력한다. (get 함수 사용)
     return 0;
 }
