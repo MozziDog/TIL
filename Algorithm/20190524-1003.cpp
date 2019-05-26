@@ -6,29 +6,27 @@
 
 //틀림
 
+//또 틀림 ㅜㅜ
+
 #include <iostream>
 
-int numOf_0[41] = {0};
-int numOf_1[41] = {0};
+int array[42] = {0};
 
 int main()
 {
-    numOf_0[0] = 1;
-    numOf_0[1] = 0;
-    numOf_1[0] = 0;
-    numOf_1[1] = 1;
-    for(int i=2; i<=40; i++)
+    array[0] = 1;
+    array[1] = 0;
+    array[2] = 1;
+    for(int i=3; i<=40; i++)
     {
-        numOf_0[i] = numOf_0[i-1]+numOf_0[i-2];
-        numOf_1[i] = numOf_1[i-1]+numOf_1[i-2];
+        array[i] = array[i-1]+array[i-2];
     }
-    int NumTestCase;
+    int NumTestCase, n;
     scanf("%d", &NumTestCase);
     for (int testCase = 0; testCase < NumTestCase; testCase++)
     {
-        int n;
         scanf("%d", &n);
-        printf("%d %d\n", numOf_0[n], numOf_1[n]);
+        printf("%d %d\n", array[n], array[n+1]);
     }
     return 0;
 }
