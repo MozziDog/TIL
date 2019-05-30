@@ -43,18 +43,13 @@ class BST
 public:
     BST();
     bool IsEmpty() const;
-    // return true iff the dictionary is empty
     pair<K, E> *Get(const K &) const;
     pair<K, E> *Get(TreeNode<K, E> *, const K &) const;
-    // return pointer to the pair with specified key; return 0 if no such pair
     void Insert(const pair<K, E> &);
-    // insert the given pair; if key is a duplicate update associated element
     void Delete(const K &);
     void Delete(TreeNode<K, E> *, TreeNode<K, E> *);
-    // delete pair with specified key
     void Inorder();
     void Inorder(TreeNode<K, E> *);
-    // Inorder traversal
     void Visit(TreeNode<K, E> *);
 
 private:
@@ -77,8 +72,7 @@ bool BST<K, E>::IsEmpty() const
 
 template <class K, class E> // Driver
 pair<K, E> *BST<K, E>::Get(const K &k) const
-{ // Search the binary search tree (*this) for a pair with key k.
-    // If such a pair is found, return a pointer to this pair; otherwise, return 0.
+{
     return Get(root, k);
 }
 
@@ -96,8 +90,8 @@ pair<K, E> *BST<K, E>::Get(TreeNode<K, E> *p, const K &k) const
 
 template <class K, class E>
 void BST<K, E>::Insert(const pair<K, E> &thePair)
-{ // Insert thePair into the binary search tree.
-    // search for thePair.first, pp is parent of p
+{
+    //찾기
     TreeNode<K, E> *p = root, *pp = 0;
     while (p)
     {
@@ -113,7 +107,7 @@ void BST<K, E>::Insert(const pair<K, E> &thePair)
         }
     }
 
-    // perform insertion
+    // 삽입
     p = new TreeNode<K, E>(thePair);
     if (root) // tree not empty
         if (thePair.first < pp->data.first)
@@ -223,16 +217,14 @@ void BST<K, E>::Delete(TreeNode<K, E> *DeleteNode, TreeNode<K, E> *ParentNode)
 }
 
 template <class K, class E>
-void BST<K, E>::Inorder()
-{ // Driver calls workhorse for traversal of entire tree.  The driver is
-    // declared as a public member function of Tree.
+void BST<K, E>::Inorder() // Driver
+{ 
     Inorder(root);
 }
 
 template <class K, class E>
-void BST<K, E>::Inorder(TreeNode<K, E> *currentNode)
-{ // Workhorse traverses the subtree rooted at currentNode.
-    // The workhorse is declared as a private member function of Tree.
+void BST<K, E>::Inorder(TreeNode<K, E> *currentNode)  // Workhorse
+{
     if (currentNode)
     {
         Inorder(currentNode->leftChild);
@@ -260,24 +252,32 @@ int main()
     binarySearchTree->Insert(pair<int, int>(5, 55));
     binarySearchTree->Insert(pair<int, int>(7, 77));
     //1. 이원 탐색 트리의 노드는 다음과 같은 순서로 추가된다. (insert 함수 사용)
+    
     std::cout << "노드 추가, 중위 순회 실행 :" << std::endl;
     binarySearchTree->Inorder();
     //2. 중위 순회를 수행하여 노드의 second값을 출력한다. (inorder 함수 사용)
+    
     binarySearchTree->Delete(4);
     //3. 노드 4를 삭제한다. (delete 함수 사용)
+    
     std::cout << "노드 4 삭제, 중위 순회 실행 :" << std::endl;
     binarySearchTree->Inorder();
     //4. 중위 순회를 수행하여 노드의 second값을 출력한다. (inorder 함수 사용)
+    
     binarySearchTree->Delete(5);
     //5. 노드 5를 삭제한다. (delete 함수 사용)
+    
     std::cout << "노드 5 삭제, 중위 순회 실행 :" << std::endl;
     binarySearchTree->Inorder();
     //6. 중위 순회를 수행하여 노드의 second값을 출력한다. (inorder 함수 사용)
+    
     binarySearchTree->Delete(2);
     //7. 노드 2를 삭제한다.(delete 함수 사용)
+    
     std::cout << "노드 2 삭제, 중위 순회 실행 :" << std::endl;
     binarySearchTree->Inorder();
     //8. 중위 순회를 수행하여 노드의 second값을 출력한다. (inorder 함수 사용)
+    
     if (binarySearchTree->Get(2))
     {
         std::cout << std::endl
@@ -287,6 +287,7 @@ int main()
     else
         std::cout << "노드 2가 존재하지 않음";
     //9. 노드 2가 있는지 확인하여 second 결과를 출력한다. (get 함수 사용)
+    
     if (binarySearchTree->Get(9))
     {
         std::cout << std::endl
@@ -297,7 +298,7 @@ int main()
     {
         std::cout << "노드 9가 존재하지 않음";
     }
-
     //10. 노드 9가 있는지 확인하여 second 결과를 출력한다. (get 함수 사용)
+    
     return 0;
 }
