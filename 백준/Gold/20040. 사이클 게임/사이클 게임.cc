@@ -20,10 +20,10 @@ bool merge(int a, int b)
 	b = find(b);
 	if (a == b) return false;
 
-	if (a > b)
+	if (p[a] > p[b])
 		swap(a, b);
-	if (a == b)
-		a--;
+	if (p[a] == p[b])
+		p[a]--;
 	p[b] = a;
 	return true;
 }
