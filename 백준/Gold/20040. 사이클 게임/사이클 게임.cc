@@ -33,17 +33,20 @@ int main()
 {
 	cin.tie(0)->sync_with_stdio(0);
 
-	int result = 0;
-	fill(p, p + MAX_COUNT, -1);
-
 	cin >> n >> m;
+
+	fill(p, p + n, -1);
+
 	for (int i = 0; i < m; i++)
 	{
 		int a, b;
 		cin >> a >> b;
-		if (!merge(a, b) && result == 0)
-			result = i + 1;
+		if (!merge(a, b))
+		{
+			cout << i + 1;
+			return 0;
+		}
 	}
-	cout << result;
+	cout << 0;
 	return 0;
 }
