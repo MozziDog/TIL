@@ -3,21 +3,21 @@
 using namespace std;
 
 int N, M;
-int num[1024][1024];
-llong sum[1024][1024];
+int num[1025][1025];
+llong sum[1025][1025];
 
 int main()
 {
 	cin.tie(0)->sync_with_stdio(0);
 
 	cin >> N >> M;
-	for(int i=0; i<N; i++)
-		for (int j = 0; j < N; j++)
+	for(int i=1; i<=N; i++)
+		for (int j = 1; j <= N; j++)
 		{
 			cin >> num[i][j];
-			sum[i][j] = (i - 1 >= 0 ? sum[i - 1][j] : 0)
-				+ (j - 1 >= 0 ? sum[i][j - 1] : 0)
-				- (i - 1 >= 0 && j - 1 >= 0 ? sum[i - 1][j - 1] : 0)
+			sum[i][j] = sum[i - 1][j]
+				+ sum[i][j - 1]
+				- sum[i - 1][j - 1]
 				+ num[i][j];
 		}
 
@@ -25,11 +25,10 @@ int main()
 	{
 		int x1, y1, x2, y2;
 		cin >> x1 >> y1 >> x2 >> y2;
-		x1--; y1--; x2--; y2--;
 		llong ans = sum[x2][y2]
-			- (x1 - 1 >= 0 ? sum[x1 - 1][y2] : 0)
-			- (y1 - 1 >= 0 ? sum[x2][y1 - 1] : 0)
-			+ (x1 - 1 >= 0 && y1 - 1 >= 0 ? sum[x1 - 1][y1 - 1] : 0);
+			- sum[x1 - 1][y2]
+			- sum[x2][y1 - 1]
+			+ sum[x1 - 1][y1 - 1];
 		cout << ans << '\n';
 	}
 	return 0;
