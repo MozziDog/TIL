@@ -9,11 +9,8 @@ typedef pair<int, int> vec;
 inline int cross(vec v1, vec v2)
 {
 	long long val = (long long)v1.X * v2.Y - (long long)v2.X * v1.Y;
-	if (val == 0)
-		return 0;
-	else
-		// 1,000,000 ^ 4면 llong 범위보다 크므로 계산 불가. 부호 정보만 남김
-		return val / abs(val);
+	// 1,000,000 ^ 4면 llong보다 크므로 계산 불가. 부호 정보만 남김
+	return val > 0 ? 1 : val == 0 ? 0 : -1;
 }
 
 int main()
@@ -38,10 +35,8 @@ int main()
 	int c230 = cross(v23, v20);
 	int c231 = cross(v23, v21);
 
-	if (c012 * c013 > 0 || c230 * c231 > 0)
-		cout << 0;
 	// 네 점이 일직선상에 놓인 경우
-	else if (c012 == 0 && c013 == 0)
+	if (c012 == 0 && c013 == 0)
 	{
 		bool xInter = min(x[0], x[1]) <= x[2] && x[2] <= max(x[0], x[1])
 			|| min(x[0], x[1]) <= x[3] && x[3] <= max(x[0], x[1])
@@ -50,12 +45,9 @@ int main()
 			|| min(y[0], y[1]) <= y[3] && y[3] <= max(y[0], y[1])
 			|| min(y[2], y[3]) <= y[0] && y[0] <= max(y[2], y[3]);
 
-		if(xInter && yInter)
-			cout << 1;
-		else
-			cout << 0;
+		cout << (xInter && yInter);
 	}
 	else
-		cout << 1;
+		cout << (c012 * c013 <= 0 && c230 * c231 <= 0);
 	return 0;
 }
