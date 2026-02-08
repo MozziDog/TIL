@@ -3,21 +3,7 @@ using namespace std;
 
 const int MAXLEN = 1'000'001;
 
-int N, ans, A[MAXLEN], Dp[MAXLEN], Index[MAXLEN];
-
-int findIndex(int num)
-{
-	int start = 0, end = N;
-	while (start <= end)
-	{
-		int mid = (start + end) / 2;
-		if (Index[mid] >= num)
-			end = mid - 1;
-		else
-			start = mid + 1;
-	}
-	return start;
-}	
+int N, ans, A[MAXLEN], Index[MAXLEN];
 
 int main()
 {
@@ -31,9 +17,9 @@ int main()
 	
 	for (int i = 1; i <= N; i++)
 	{
-		Dp[i] = findIndex(A[i]);
-		Index[Dp[i]] = min(Index[Dp[i]], A[i]);
-		ans = max(ans, Dp[i]);
+		int pos = lower_bound(Index, Index + N, A[i]) - Index;
+		Index[pos] = min(Index[pos], A[i]);
+		ans = max(ans, pos);
 	}
 	cout << ans;
 	return 0;
