@@ -1,10 +1,12 @@
 #include <bits/stdc++.h>
 using namespace std;
 
+#define llong long long
+
 const int MAX = 300'000;
 const long long DIVIDER = 1'000'000'007;
 int N, A[MAX], pow2Left[MAX];
-long long ans = 0;
+long long ansPlus, ansMinus;
 
 int main()
 {
@@ -24,15 +26,18 @@ int main()
 		pow2Left[i] = (pow2Left[i - 1] << 1) % DIVIDER;
 	}
 
-	for (int i = 0; i < N; i++)
+	for (int i = 1; i < N; i++)
 	{
-		for (int j = i + 1; j < N; j++)
-		{
-			ans += (A[j] - A[i]) % DIVIDER * pow2Left[j - i - 1];
-			ans %= DIVIDER;
-		}
+		ansPlus += A[i] % DIVIDER * (pow2Left[i] - 1);
+		ansPlus %= DIVIDER;
 	}
 
-	cout << ans;
+	for (int i = 0; i < N - 1; i++)
+	{
+		ansMinus += A[i] % DIVIDER * (pow2Left[N - i - 1] - 1);
+		ansMinus %= DIVIDER;
+	}
+
+	cout << (ansPlus - ansMinus + DIVIDER) % DIVIDER;
 	return 0;
 }
